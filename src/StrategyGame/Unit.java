@@ -46,6 +46,10 @@ public class Unit implements Serializable {
         System.out.println(eu.getHealth());
     }
     
+    public void attack(Player ep) {
+        ep.setHealth(ep.getHealth()-this.getAttack());
+    }
+    
     public String getName() {
         return name;
     }

@@ -202,13 +202,38 @@ public class GameLoop extends AnimationTimer implements EventHandler{
         String first;
         String last;
 
+        
+        
         System.out.println(s);
         if (s.contains("-")) {
             first = s.substring(0,s.indexOf("-"));
             last = s.substring(s.indexOf("-")+1);
             if (ai.isAt(getXComponent(last),getYComponent(last))){
-                
+         
+                int deltaX = getXComponent(last) - getXComponent(first);
+                int deltaY = getYComponent(last) - getYComponent(first);
+                if(1 <= up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves() && (Math.abs(deltaX) + Math.abs(deltaY)) <= up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getRange()) {
+                    up.getUnitAtLocation(getXComponent(first), getYComponent(first)).setMoves(up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves()-1);
+                    up.getUnitAtLocation(getXComponent(first), getYComponent(first)).attack(ai);
+                    
+                    if(ai.getHealth() <= 0) {
+                        victory();
+                    }
+                    
+                }
             }else if (up.isAt(getXComponent(last),getYComponent(last))) {
+                
+                int deltaX = getXComponent(last) - getXComponent(first);
+                int deltaY = getYComponent(last) - getYComponent(first);
+                if(1 <= ai.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves() && (Math.abs(deltaX) + Math.abs(deltaY)) <= ai.getUnitAtLocation(getXComponent(first), getYComponent(first)).getRange()) {
+                    ai.getUnitAtLocation(getXComponent(first), getYComponent(first)).setMoves(ai.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves()-1);
+                    ai.getUnitAtLocation(getXComponent(first), getYComponent(first)).attack(up);
+                    
+                    if(up.getHealth() <= 0) {
+                        defeat();
+                    }
+                    
+                }
                 
             }else if(ai.hasUnitAt(getXComponent(last), getYComponent(last))) {
                 int deltaX = getXComponent(last) - getXComponent(first);
@@ -278,6 +303,13 @@ public class GameLoop extends AnimationTimer implements EventHandler{
         }catch(Exception e) {
         }
         return temp;
+    }
+    
+    private void victory() {
+        
+    }
+    private void defeat(){
+        
     }
 
 
