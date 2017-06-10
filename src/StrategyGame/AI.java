@@ -79,13 +79,13 @@ public class AI extends Player {
                     break;
             }
         }else {
-            return ("t");
+            
         }
         
         
    
         
-        
+        command = "AI end";
         return command;
     }
 }

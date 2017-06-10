@@ -20,6 +20,7 @@ public class Player {
     private int yLoc;
     private int gold;
     private int moves = 2;
+    private int maxMoves = 2;
     private double health = 1000;
     Animation animation;
     List<Unit> units = new ArrayList<Unit>();
@@ -33,6 +34,13 @@ public class Player {
            animation.frames[0] = new Image(new FileInputStream("src/resources/images/units/playerCrown.png"));
        }catch(Exception e) {
            
+       }
+   }
+   
+   public void resetMoves() {
+       moves = maxMoves;
+       for (Unit u: units) {
+           u.resetMoves();
        }
    }
    

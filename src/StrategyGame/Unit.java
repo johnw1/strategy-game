@@ -27,6 +27,7 @@ public class Unit implements Serializable {
     private int range = 1;
     
     private int moves = 2;
+    private int maxMoves = moves;
     
     boolean isRanged = false;
     
@@ -120,6 +121,10 @@ public class Unit implements Serializable {
         return bonus;
     }
      
+    public void resetMoves() {
+        moves = maxMoves;
+    }
+    
     public Unit(String n, String t, int x, int y, boolean isAI) {
         xLoc = x;
         yLoc = y;
@@ -176,6 +181,7 @@ public class Unit implements Serializable {
                 defense = 85;
                 price = 10;
                 moves = 1;
+                maxMoves = 1;
                 break;
             case "Goblin":
                 attack = 25;
@@ -187,6 +193,7 @@ public class Unit implements Serializable {
                 defense = 30;
                 price = 8;
                 moves = 3;
+                maxMoves = 3;
                 break;
             case "Wizard":
                 attack = 80;
@@ -219,6 +226,7 @@ public class Unit implements Serializable {
                 defense = 100;
                 price = 25;
                 moves = 3;
+                maxMoves = 3;
                 break;
             default:
                 break;

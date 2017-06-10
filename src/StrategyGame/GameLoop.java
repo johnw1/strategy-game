@@ -76,6 +76,11 @@ public class GameLoop extends AnimationTimer implements EventHandler{
 
         double t = (now - startNanoTime)/1000000000.0;
 
+        // Allows the AI to process its turn
+        if(!isPlayersTurn){
+            commands.add(ai.makeMove(up));  
+        }
+        
         update(t);
         render(gc, t);
         frameRate = "" + Math.round(1/(t-tLast));
@@ -120,72 +125,75 @@ public class GameLoop extends AnimationTimer implements EventHandler{
         KeyEvent ke;
         ScrollEvent se;
         
-        switch(event.getEventType().toString()){
+        if (isPlayersTurn) {
+            switch(event.getEventType().toString()){
 
-            case "KEY_TYPED":
-                ke = (KeyEvent)event;
-                System.out.println("Key " + ke.getCharacter() + " pressed");
+                case "KEY_TYPED":
+                    ke = (KeyEvent)event;
+                    System.out.println("Key " + ke.getCharacter() + " pressed");
       
-                break;
-            case "MOUSE_CLICKED":
-                me = (MouseEvent)event;
+                    break;
+                case "MOUSE_CLICKED":
+                    me = (MouseEvent)event;
                 
-                int x = (int)Math.ceil((me.getX()-centerX+tm.getCenterX())/(100*tm.getScale()))-1;
-                int y = (int)Math.ceil((me.getY()-centerY+tm.getCenterY())/(100*tm.getScale()))-1;
-                
-                
-                if (me.getButton() == MouseButton.PRIMARY) {
-                    if (commandString.equals("") && up.hasUnitAt(x,y)){
-                        commandString += select(me.getX(),me.getY()) + "-";
+                    
+                    int x = (int)Math.ceil((me.getX()-centerX+tm.getCenterX())/(100*tm.getScale()))-1;
+                    int y = (int)Math.ceil((me.getY()-centerY+tm.getCenterY())/(100*tm.getScale()))-1;
 
-                    }else if (commandString.contains("-")){
-                        if(ai.hasUnitAt(x, y)){
+                
+                    if (me.getButton() == MouseButton.PRIMARY) {
+                        if (commandString.equals("") && up.hasUnitAt(x,y)){
                             commandString += select(me.getX(),me.getY()) + "-";
-                            commands.offer(commandString);
-                            commandString = "";
-                        }else if(up.hasUnitAt(x, y)){
+
+                        }else if (commandString.contains("-")){
+                            if(ai.hasUnitAt(x, y)){
+                                commandString += select(me.getX(),me.getY()) + "-";
+                                commands.offer(commandString);
+                                commandString = "";
+                            }else if(up.hasUnitAt(x, y)){
                             
-                        }else if(tm.hasTileAt(x, y)){
-                            commandString += select(me.getX(),me.getY());
-                            commands.offer(commandString);
-                            commandString = "";
-                        }else {
+                            }else if(tm.hasTileAt(x, y)){
+                                commandString += select(me.getX(),me.getY());
+                                commands.offer(commandString);
+                                commandString = "";
+                            }else {
                             
+                            }
                         }
+                    
+                    }else if (me.getButton() == MouseButton.SECONDARY) {
+                        commands.add("USER end");
                     }
-                    
-                }else if (me.getButton() == MouseButton.SECONDARY) {
-                    
-                }
                
 
-                break;
-            case "MOUSE_PRESSED":
-                me = (MouseEvent)event;
-                initX = me.getX();
-                initY = me.getY();
-                break;
-            case "MOUSE_RELEASED":
-                me = (MouseEvent)event;
-                //finX = me.getX();
-                //finY = me.getY();
-                //centerX -= initX - finX;
-                //centerY -= initY - finY;
-                break;
-            case "MOUSE_DRAGGED":
-                me = (MouseEvent)event;
+                    break;
+                case "MOUSE_PRESSED":
+                    me = (MouseEvent)event;
+                    initX = me.getX();
+                    initY = me.getY();
+                    break;
+                case "MOUSE_RELEASED":
+                    me = (MouseEvent)event;
+                    //finX = me.getX();
+                    //finY = me.getY();
+                    //centerX -= initX - finX;
+                    //centerY -= initY - finY;
+                    break;
+                case "MOUSE_DRAGGED":
+                    me = (MouseEvent)event;
                 
-                centerX -= initX - me.getX();
-                centerY -= initY - me.getY();
-                initX = me.getX();
-                initY = me.getY();
-                break;
-            case "SCROLL":
-                se = (ScrollEvent)event;
-                tm.adjustScale((se.getDeltaY()/90)/10);
-                break;
-            default:
-                break;
+                    centerX -= initX - me.getX();
+                    centerY -= initY - me.getY();
+                    initX = me.getX();
+                    initY = me.getY();
+                    break;
+                case "SCROLL":
+                    se = (ScrollEvent)event;
+                    tm.adjustScale((se.getDeltaY()/90)/10);
+                    break;
+                default:
+                    break;
+            }
         }
 
     }
@@ -233,6 +241,14 @@ public class GameLoop extends AnimationTimer implements EventHandler{
                 
             }
 
+        }else if(s.contains("end")){
+            if(s.contains("AI")){
+                up.resetMoves();
+                isPlayersTurn = true;
+            }else{
+                ai.resetMoves();
+                isPlayersTurn = false;
+            }
         }
     }
     
