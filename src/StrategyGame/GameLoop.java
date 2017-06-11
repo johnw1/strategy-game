@@ -143,11 +143,11 @@ public class GameLoop extends AnimationTimer implements EventHandler{
                 
                     if (me.getButton() == MouseButton.PRIMARY) {
                         if (commandString.equals("") && up.hasUnitAt(x,y)){
-                            commandString += select(me.getX(),me.getY()) + "-";
+                            commandString += "USER" + select(me.getX(),me.getY()) + "-";
 
                         }else if (commandString.contains("-")){
                             if(ai.hasUnitAt(x, y)){
-                                commandString += select(me.getX(),me.getY()) + "-";
+                                commandString += select(me.getX(),me.getY());
                                 commands.offer(commandString);
                                 commandString = "";
                             }else if(up.hasUnitAt(x, y)){
@@ -201,80 +201,99 @@ public class GameLoop extends AnimationTimer implements EventHandler{
     private void process(String s) {
         String first;
         String last;
-
-        
-        
-        System.out.println(s);
-        if (s.contains("-")) {
-            first = s.substring(0,s.indexOf("-"));
-            last = s.substring(s.indexOf("-")+1);
-            if (ai.isAt(getXComponent(last),getYComponent(last))){
-         
-                int deltaX = getXComponent(last) - getXComponent(first);
-                int deltaY = getYComponent(last) - getYComponent(first);
-                if(1 <= up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves() && (Math.abs(deltaX) + Math.abs(deltaY)) <= up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getRange()) {
-                    up.getUnitAtLocation(getXComponent(first), getYComponent(first)).setMoves(up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves()-1);
-                    up.getUnitAtLocation(getXComponent(first), getYComponent(first)).attack(ai);
+        if (s.contains("USER")){
+            if(s.contains("-")){
+                first = s.substring(0,s.indexOf("-"));
+                last = s.substring(s.indexOf("-")+1);
+                if(ai.isAt(getXComponent(last), getYComponent(last))){
+                    int deltaX = getXComponent(last) - getXComponent(first);
+                    int deltaY = getYComponent(last) - getYComponent(first);
+                    Unit u1 = up.getUnitAtLocation(getXComponent(first), getYComponent(first));
+                    if(1 <= u1.getMoves() && (Math.abs(deltaX)+Math.abs(deltaY)) <= u1.getMoves()){
+                        u1.setMoves(u1.getMoves()-1);
+                        u1.attack(ai);
+                        if(ai.getHealth() <= 0){
+                            victory();
+                        }
+                    }
+                }else if (up.isAt(getXComponent(last), getYComponent(last))){
                     
-                    if(ai.getHealth() <= 0) {
-                        victory();
+                    
+                }else if(ai.hasUnitAt(getXComponent(last), getYComponent(last))){
+                    int deltaX = getXComponent(last) - getXComponent(first);
+                    int deltaY = getYComponent(last) - getYComponent(last);
+                    Unit u1 = up.getUnitAtLocation(getXComponent(first), getYComponent(first));
+                    Unit u2 = ai.getUnitAtLocation(getXComponent(last), getYComponent(last));
+                    if (1<= u1.getMoves() && (Math.abs(deltaX)+Math.abs(deltaY)) <= u1.getMoves()){
+                        u1.attack(u2);
+                        if(u2.getHealth() <= 0) {
+                            ai.units.remove(u2);
+                        }
                     }
                     
-                }
-            }else if (up.isAt(getXComponent(last),getYComponent(last))) {
-                
-                int deltaX = getXComponent(last) - getXComponent(first);
-                int deltaY = getYComponent(last) - getYComponent(first);
-                if(1 <= ai.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves() && (Math.abs(deltaX) + Math.abs(deltaY)) <= ai.getUnitAtLocation(getXComponent(first), getYComponent(first)).getRange()) {
-                    ai.getUnitAtLocation(getXComponent(first), getYComponent(first)).setMoves(ai.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves()-1);
-                    ai.getUnitAtLocation(getXComponent(first), getYComponent(first)).attack(up);
                     
-                    if(up.getHealth() <= 0) {
-                        defeat();
+                }else if(up.hasUnitAt(getXComponent(last), getYComponent(last))){
+                    
+                }else if(tm.hasTileAt(getXComponent(last), getYComponent(last))){
+                    int deltaX = getXComponent(last) - getXComponent(first);
+                    int deltaY = getYComponent(last) - getYComponent(first);
+                    if(Math.abs(deltaX) + Math.abs(deltaY) <= up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves()) {
+                        up.getUnitAtLocation(getXComponent(first), getYComponent(first)).setMoves(up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves()-(Math.abs(deltaX) + (Math.abs(deltaY))));
+                        //System.out.println(up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves());
+                        up.getUnitAtLocation(getXComponent(first), getYComponent(first)).translate(deltaX, deltaY);
+                    
                     }
-                    
+                }else if (s.contains("end")) {
+                    ai.resetMoves();
+                    isPlayersTurn = false;
                 }
-                
-            }else if(ai.hasUnitAt(getXComponent(last), getYComponent(last))) {
-                int deltaX = getXComponent(last) - getXComponent(first);
-                int deltaY = getYComponent(last) - getYComponent(first);
-                if(1 <= up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves() && (Math.abs(deltaX) + Math.abs(deltaY)) <= up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getRange()) {
-                    up.getUnitAtLocation(getXComponent(first), getYComponent(first)).setMoves(up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves()-1);
-                    //System.out.println(up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves());
-                    up.getUnitAtLocation(getXComponent(first), getYComponent(first)).attack(ai.getUnitAtLocation(getXComponent(last), getYComponent(last)));
-                    if (up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getHealth() <= 0) {
-                        up.units.remove(up.getUnitAtLocation(getXComponent(first), getYComponent(first)));
-                    }
-                    if (ai.getUnitAtLocation(getXComponent(last), getYComponent(last)).getHealth() <= 0) {
-                        ai.units.remove(ai.getUnitAtLocation(getXComponent(last), getYComponent(last)));
-                    }
-                    
-                }
-                
-            }else if(up.hasUnitAt(getXComponent(last), getYComponent(last))) {
-                
-            }else if(tm.hasTileAt(getXComponent(last), getYComponent(last))) {
-                int deltaX = getXComponent(last) - getXComponent(first);
-                int deltaY = getYComponent(last) - getYComponent(first);
-                if(Math.abs(deltaX) + Math.abs(deltaY) <= up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves()) {
-                    up.getUnitAtLocation(getXComponent(first), getYComponent(first)).setMoves(up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves()-(Math.abs(deltaX) + (Math.abs(deltaY))));
-                    //System.out.println(up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves());
-                    up.getUnitAtLocation(getXComponent(first), getYComponent(first)).translate(deltaX, deltaY);
-                    
-                }
-            }else {
-                
             }
-
-        }else if(s.contains("end")){
-            if(s.contains("AI")){
+        }else if(s.contains("AI")){
+            if(s.contains("-")){
+                first = s.substring(0,s.indexOf("-"));
+                last = s.substring(s.indexOf("-")+1);
+                if(up.isAt(getXComponent(last), getYComponent(last))){
+                    int deltaX = getXComponent(last) - getXComponent(first);
+                    int deltaY = getYComponent(last) - getYComponent(first);
+                    Unit u1 = ai.getUnitAtLocation(getXComponent(first), getYComponent(first));
+                    if(1 <= u1.getMoves() && (Math.abs(deltaX)+Math.abs(deltaY)) <= u1.getMoves()){
+                        u1.setMoves(u1.getMoves()-1);
+                        u1.attack(up);
+                        if(up.getHealth() <= 0){
+                            defeat();
+                        }
+                    }
+                }else if (ai.isAt(getXComponent(last), getYComponent(last))){
+                    
+                }else if(ai.hasUnitAt(getXComponent(last), getYComponent(last))){
+    
+                    
+                }else if(up.hasUnitAt(getXComponent(last), getYComponent(last))){
+                    
+                }else if(tm.hasTileAt(getXComponent(last), getYComponent(last))){
+                    int deltaX = getXComponent(last) - getXComponent(first);
+                    int deltaY = getYComponent(last) - getYComponent(first);
+                    if(Math.abs(deltaX) + Math.abs(deltaY) <= ai.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves()) {
+                        ai.getUnitAtLocation(getXComponent(first), getYComponent(first)).setMoves(ai.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves()-(Math.abs(deltaX) + (Math.abs(deltaY))));
+                        //System.out.println(up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves());
+                        ai.getUnitAtLocation(getXComponent(first), getYComponent(first)).translate(deltaX, deltaY);
+                    }
+                }else if(s.contains("end")) { 
+                    up.resetMoves();
+                    isPlayersTurn = true;
+                }
+            }  
+        }else{    
+        }
+        if(s.contains("end")){
+            isPlayersTurn = !isPlayersTurn;
+            if(isPlayersTurn){
                 up.resetMoves();
-                isPlayersTurn = true;
             }else{
                 ai.resetMoves();
-                isPlayersTurn = false;
             }
         }
+        System.out.println(s);    
     }
     
     private String select(double x, double y) {
