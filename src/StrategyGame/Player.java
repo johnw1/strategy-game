@@ -21,7 +21,7 @@ public class Player {
     private int gold;
     private int moves = 2;
     private int maxMoves = 2;
-    private double health = 1000;
+    private double health = 500;
     Animation animation;
     List<Unit> units = new ArrayList<Unit>();
     

@@ -15,7 +15,7 @@ import javafx.scene.image.Image;
 public class Tile {
     Animation animation;
     byte terrain;
-    boolean isFilled = false;
+    private boolean isAccessible = true;
     /*
     0 represents null
     1 represents grass
@@ -54,6 +54,7 @@ public class Tile {
             case 4:
                 break;
             case 5:
+                //isAccessible = false;
                 try {
                     animation = new Animation();
                     animation.frames = new Image[4];
@@ -73,6 +74,10 @@ public class Tile {
             default:
                 break;
         }
+    }
+    
+    public boolean isAccessible(){
+        return isAccessible;
     }
 
 }

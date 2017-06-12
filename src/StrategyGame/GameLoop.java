@@ -234,9 +234,10 @@ public class GameLoop extends AnimationTimer implements EventHandler{
                     
                 }else if(up.hasUnitAt(getXComponent(last), getYComponent(last))){
                     
-                }else if(tm.hasTileAt(getXComponent(last), getYComponent(last))){
+                }else if(tm.hasTileAt(getXComponent(last), getYComponent(last)) && isFreeBetween(getXComponent(first),getYComponent(first),getXComponent(last),getYComponent(last))){
                     int deltaX = getXComponent(last) - getXComponent(first);
                     int deltaY = getYComponent(last) - getYComponent(first);
+                    System.out.println("IS FREE FROM ? " + isFreeBetween(getXComponent(first),getYComponent(first),getXComponent(last),getYComponent(last)));
                     if(Math.abs(deltaX) + Math.abs(deltaY) <= up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves()) {
                         up.getUnitAtLocation(getXComponent(first), getYComponent(first)).setMoves(up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves()-(Math.abs(deltaX) + (Math.abs(deltaY))));
                         //System.out.println(up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves());
@@ -270,10 +271,10 @@ public class GameLoop extends AnimationTimer implements EventHandler{
                     
                 }else if(up.hasUnitAt(getXComponent(last), getYComponent(last))){
                     
-                }else if(tm.hasTileAt(getXComponent(last), getYComponent(last))){
+                }else if(tm.hasTileAt(getXComponent(last), getYComponent(last)) && isFreeBetween(getXComponent(first),getYComponent(first),getXComponent(last),getYComponent(last))){
                     int deltaX = getXComponent(last) - getXComponent(first);
                     int deltaY = getYComponent(last) - getYComponent(first);
-                    if(Math.abs(deltaX) + Math.abs(deltaY) <= ai.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves()) {
+                    if(Math.abs(deltaX) + Math.abs(deltaY) <= ai.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves() ) {
                         ai.getUnitAtLocation(getXComponent(first), getYComponent(first)).setMoves(ai.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves()-(Math.abs(deltaX) + (Math.abs(deltaY))));
                         //System.out.println(up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves());
                         ai.getUnitAtLocation(getXComponent(first), getYComponent(first)).translate(deltaX, deltaY);
@@ -328,6 +329,30 @@ public class GameLoop extends AnimationTimer implements EventHandler{
         
     }
     private void defeat(){
+        
+    }
+    
+    
+    private boolean isFreeBetween(int x1,int y1,int x2,int y2){
+        
+        if(x1 == x2){
+            if (Math.abs(y2-y1) > 1) {
+                for (int t = Math.min(y1,y2) + 1; t < Math.max(y1, y2); t++){
+                    if (!tm.tile[x1][t].isAccessible() || up.hasUnitAt(x1, t) || ai.hasUnitAt(x1, t) || up.isAt(x1, t) || ai.isAt(x1,t)){
+                        return false;
+                    }
+                }
+            }
+        }else if(y1 == y2){
+            if (Math.abs(x2-x1) > 1) {
+                for (int t = Math.min(x1,x2) + 1; t < Math.max(x1, x2); t++){
+                    if (!tm.tile[t][y1].isAccessible() || up.hasUnitAt(t, y1) || ai.hasUnitAt(t, y1) || up.isAt(t, y1) || ai.isAt(t,y1)){
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
         
     }
 

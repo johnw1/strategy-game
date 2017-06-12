@@ -36,7 +36,7 @@ public class TileMap implements Serializable {
         for (int r = 0; r < tile.length;r++) {
             for (int c = 0; c < tile[0].length;c++) {
                 gc.drawImage(tile[r][c].animation.getFrame(t), 100*scale*c+offsetX-getCenterX(), 100*scale*r+offsetY-getCenterY(),100*scale,100*scale);
-                //gc.fillText("" + c + "," + r, 100*scale*c+offsetX-getCenterX()+15, 100*scale*r+offsetY-getCenterY()+15);
+                gc.fillText("" + c + "," + r, 100*scale*c+offsetX-getCenterX()+15, 100*scale*r+offsetY-getCenterY()+15);
             }
         }
         
@@ -60,12 +60,12 @@ public class TileMap implements Serializable {
         gc.setFill(Color.RED);
             gc.fillRect(100*scale*p.getX()+offsetX-getCenterX() + 25*scale, 100*scale*p.getY()+offsetY-getCenterY() + 90*scale, 50*scale, 5*scale);
             gc.setFill(Color.LIGHTGREEN);
-            gc.fillRect(100*scale*p.getX()+offsetX-getCenterX() + 25*scale, 100*scale*p.getY()+offsetY-getCenterY() + 90*scale, p.getHealth()/1000*50*scale, 5*scale);
+            gc.fillRect(100*scale*p.getX()+offsetX-getCenterX() + 25*scale, 100*scale*p.getY()+offsetY-getCenterY() + 90*scale, p.getHealth()/500*50*scale, 5*scale);
             
             gc.setFill(Color.RED);
             gc.fillRect(100*scale*a.getX()+offsetX-getCenterX() + 25*scale, 100*scale*a.getY()+offsetY-getCenterY() + 90*scale, 50*scale, 5*scale);
             gc.setFill(Color.LIGHTGREEN);
-            gc.fillRect(100*scale*a.getX()+offsetX-getCenterX() + 25*scale, 100*scale*a.getY()+offsetY-getCenterY() + 90*scale, a.getHealth()/1000*50*scale, 5*scale);
+            gc.fillRect(100*scale*a.getX()+offsetX-getCenterX() + 25*scale, 100*scale*a.getY()+offsetY-getCenterY() + 90*scale, a.getHealth()/500*50*scale, 5*scale);
         
         gc.setFill(Color.RED);
         
@@ -114,11 +114,5 @@ public class TileMap implements Serializable {
         
         return temp;
     }
-    
-
-
-    
-
-    
-    
+       
 }
