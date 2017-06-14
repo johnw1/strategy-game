@@ -65,7 +65,6 @@ public class AI extends Player {
                 case 0:
                     switch(strategy) {
                         case 0:
-                            
                             break;
                         case 1:
                             break;
