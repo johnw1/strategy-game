@@ -19,6 +19,7 @@ public class AI extends Player {
     0 - easy
     1 - medium
     2 - hard
+    3 - impossible
     */
     
     // holds the strategy
@@ -33,6 +34,7 @@ public class AI extends Player {
     public AI(byte difficulty,int x, int y) {
         super(x,y);
         d = difficulty;
+        goldPerTurn = 4+3*d;
         try {
            animation = new Animation();
            animation.frames = new Image[1];
@@ -43,12 +45,27 @@ public class AI extends Player {
     }
     
     public String makeMove(Player p) {
+        // THE STRING RETURNED IS THE COMMAND
+        /*-----------------------------------
+        A few comments on commands
+        -------------------------------------
+        To move or attack use the following notation
+            AI(unitLocationX,unitLocationY)-(enemyLocationX,enemyLocationY)
+        To purchase an item, use the following notation
+            AIb<unitName>(locationX,locationY)
+        
+        
+        
+        
+        -------------------------------------
+        */
         String command = "";
         if (this.hasMovesRemaining()) {
             switch (d) {
                 case 0:
                     switch(strategy) {
                         case 0:
+                            
                             break;
                         case 1:
                             break;
@@ -63,6 +80,8 @@ public class AI extends Player {
                         case 1:
                             break;
                         case 2:
+                            break;
+                        case 3:
                             break;
                         
                     }

@@ -259,7 +259,7 @@ public class GameLoop extends AnimationTimer implements EventHandler {
                 System.out.println("Processed");
                 int locX = getXComponent(s);
                 int locY = getYComponent(s);
-                if (isEmpty(locX,locY) && (Math.abs(locX - up.getX()) + Math.abs(locY - up.getY())) == 1 ) {
+                if (isEmpty(locX, locY) && (Math.abs(locX - up.getX()) + Math.abs(locY - up.getY())) == 1) {
                     isBuying = true;
                     if (tempUnit.getName().equals("")) {
                         tempUnit = new Unit("Archer", tm.tile[locX][locY].terrain, locX, locY, false);
@@ -288,10 +288,14 @@ public class GameLoop extends AnimationTimer implements EventHandler {
                 }
 
             } else if (s.contains("finalize")) {
-                isBuying = false;
-                if (!tempUnit.getName().equals("")){
+                if (up.getGold() > tempUnit.getPrice() && !tempUnit.getName().equals("")) {
+                    isBuying = false;
                     up.units.add(tempUnit);
+                    up.setGold(up.getGold() - tempUnit.getPrice());
+                }else{
+                    //ac.playSoundEffect("failed_action");
                 }
+
             }
 
         } else if (s.contains("AI")) {
@@ -323,10 +327,15 @@ public class GameLoop extends AnimationTimer implements EventHandler {
                         //System.out.println(up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves());
                         ai.getUnitAtLocation(getXComponent(first), getYComponent(first)).translate(deltaX, deltaY);
                     }
-                } else if (s.contains("end")) {
-                    up.resetMoves();
-                    isPlayersTurn = true;
+                } else{
                 }
+            }else if(s.contains("b")){
+                int locX = getXComponent(s);
+                int locY = getYComponent(s);
+                String name = s.substring(s.indexOf("<")+1,s.indexOf(">"));
+                Unit aiTempUnit = new Unit(name,tm.tile[locX][locY].getTerrain(),locX,locY,true);
+                ai.units.add(aiTempUnit);
+                ai.setGold(ai.getGold() - aiTempUnit.getPrice());
             }
 
             if (s.contains("end")) {
@@ -377,15 +386,15 @@ public class GameLoop extends AnimationTimer implements EventHandler {
     private void defeat() {
 
     }
-    
-    boolean isEmpty(int x, int y){
-        if(ai.isAt(x, y) || ai.hasUnitAt(x, y)){
+
+    boolean isEmpty(int x, int y) {
+        if (ai.isAt(x, y) || ai.hasUnitAt(x, y)) {
             return false;
         }
-        if(up.isAt(x, y) || up.hasUnitAt(x, y)){
+        if (up.isAt(x, y) || up.hasUnitAt(x, y)) {
             return false;
         }
-        if(!tm.tile[x][y].isAccessible()){
+        if (!tm.tile[x][y].isAccessible()) {
             return false;
         }
         return true;
@@ -396,7 +405,7 @@ public class GameLoop extends AnimationTimer implements EventHandler {
         if (x1 == x2) {
             if (Math.abs(y2 - y1) > 1) {
                 for (int t = Math.min(y1, y2) + 1; t < Math.max(y1, y2); t++) {
-                    if (isEmpty(x1,t)) {
+                    if (isEmpty(x1, t)) {
                         return false;
                     }
                 }
@@ -404,9 +413,9 @@ public class GameLoop extends AnimationTimer implements EventHandler {
         } else if (y1 == y2) {
             if (Math.abs(x2 - x1) > 1) {
                 for (int t = Math.min(x1, x2) + 1; t < Math.max(x1, x2); t++) {
-                    if (isEmpty(t,y1)) {
+                    if (isEmpty(t, y1)) {
                         return false;
-                        
+
                     }
                 }
             }

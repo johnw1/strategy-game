@@ -12,6 +12,7 @@ import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 /**
  *
@@ -83,6 +84,10 @@ public class TileMap implements Serializable {
 
         if (isBuying) {
             gc.drawImage(tempUnit.animation.getFrame(t), 100 * scale * tempUnit.getX() + offsetX - getCenterX(), 100 * scale * tempUnit.getY() + offsetY - getCenterY(), 100 * scale, 100 * scale);
+            gc.setFill(Color.YELLOW);
+            Font purchaseFont = new Font(16*scale);
+            gc.setFont(purchaseFont);
+            gc.fillText("Cost: "+tempUnit.getPrice(),100 * scale * tempUnit.getX() + offsetX - getCenterX() + scale * 25 , 100 * scale * tempUnit.getY() + offsetY - getCenterY()+scale*80);
         }
 
     }

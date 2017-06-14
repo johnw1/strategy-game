@@ -16,12 +16,13 @@ import javafx.scene.image.Image;
  * @author johnwmarrs
  */
 public class Player {
-    private int xLoc;
-    private int yLoc;
-    private int gold;
-    private int moves = 2;
-    private int maxMoves = 2;
-    private double health = 500;
+    int xLoc;
+    int goldPerTurn = 5;
+    int yLoc;
+    int gold = 5;
+    int moves = 2;
+    int maxMoves = 2;
+    double health = 500;
     Animation animation;
     List<Unit> units = new ArrayList<Unit>();
     
@@ -98,6 +99,18 @@ public class Player {
    }
    public void setY(int y) {
        yLoc = y;
+   }
+   public int getGold(){
+       return gold;
+   }
+   public void setGold(int g){
+       gold = g;
+   }
+   public int getGoldPerTurn(){
+       return goldPerTurn;
+   }
+   public void setGoldPerTurn(int g){
+       goldPerTurn = g;
    }
    public void translate(int deltaX, int deltaY) {
        xLoc += deltaX;
