@@ -14,7 +14,7 @@ import javafx.scene.image.Image;
  */
 public class Tile {
     Animation animation;
-    byte terrain;
+    String terrain;
     private boolean isAccessible = true;
     /*
     0 represents null
@@ -26,12 +26,12 @@ public class Tile {
     6 represents city
     */
     
-    public Tile(byte t){
+    public Tile(String t){
         terrain = t;
         switch(t){
-            case 0:
+            case "Null":
                 break;
-            case 1:
+            case "Grass":
                 try {
                     animation = new Animation();
                     animation.frames = new Image[1];
@@ -40,7 +40,7 @@ public class Tile {
                     e.printStackTrace();
                 }
                 break;
-            case 2:
+            case "Forest":
                 try {
                     animation = new Animation();
                     animation.frames = new Image[1];
@@ -49,11 +49,11 @@ public class Tile {
                     e.printStackTrace();
                 }
                 break;
-            case 3:
+            case "Mountain":
                 break;
-            case 4:
+            case "Desert":
                 break;
-            case 5:
+            case "Water":
                 //isAccessible = false;
                 try {
                     animation = new Animation();
@@ -69,7 +69,7 @@ public class Tile {
                     e.printStackTrace();
                 }
                 break;
-            case 6:
+            case "City":
                 break;
             default:
                 break;
@@ -78,6 +78,10 @@ public class Tile {
     
     public boolean isAccessible(){
         return isAccessible;
+    }
+    
+    public String getTerrain(){
+        return terrain;
     }
 
 }
