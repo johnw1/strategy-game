@@ -34,6 +34,7 @@ public class GameLoop extends AnimationTimer implements EventHandler {
     //----------------------------------
     // Variables and AI DATA
     AI ai;
+    //comment
     //----------------------------------
     //Variables to record commands for player
     AudioController ac;
