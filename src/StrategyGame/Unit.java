@@ -150,7 +150,7 @@ public class Unit implements Serializable {
                     }else {
                         animation = new Animation();
                         animation.frames = new Image[1];
-                        animation.frames[0] = new Image(new FileInputStream("src/resources/images/units/aiArcher.png"));
+                        animation.frames[0] = new Image(new FileInputStream("src/resources/images/units/enemyArcher.png"));
                     }
                 }catch (Exception e) {
                     
@@ -179,6 +179,19 @@ public class Unit implements Serializable {
                 attack = 60;
                 defense = 50;
                 price = 11;
+                try {
+                    if (!isAI) {
+                        animation = new Animation();
+                        animation.frames = new Image[1];
+                        animation.frames[0] = new Image(new FileInputStream("src/resources/images/units/playerSwordsman.png"));
+                    }else {
+                        animation = new Animation();
+                        animation.frames = new Image[1];
+                        animation.frames[0] = new Image(new FileInputStream("src/resources/images/units/enemySwordsman.png"));
+                    }
+                }catch (Exception e) {
+                    
+                }
                 break;
             case "Guard":
                 attack = 25;
@@ -186,11 +199,37 @@ public class Unit implements Serializable {
                 price = 10;
                 moves = 1;
                 maxMoves = 1;
+                try {
+                    if (!isAI) {
+                        animation = new Animation();
+                        animation.frames = new Image[1];
+                        animation.frames[0] = new Image(new FileInputStream("src/resources/images/units/playerGuard.png"));
+                    }else {
+                        animation = new Animation();
+                        animation.frames = new Image[1];
+                        animation.frames[0] = new Image(new FileInputStream("src/resources/images/units/enemyGuard.png"));
+                    }
+                }catch (Exception e) {
+                    
+                }
                 break;
             case "Goblin":
                 attack = 25;
                 defense = 25;
                 price = 3;
+                try {
+                    if (!isAI) {
+                        animation = new Animation();
+                        animation.frames = new Image[1];
+                        animation.frames[0] = new Image(new FileInputStream("src/resources/images/units/playerSwordsman.png"));
+                    }else {
+                        animation = new Animation();
+                        animation.frames = new Image[1];
+                        animation.frames[0] = new Image(new FileInputStream("src/resources/images/units/enemySwordsman.png"));
+                    }
+                }catch (Exception e) {
+                    
+                }
                 break;
             case "Ninja":
                 attack = 55;
@@ -198,6 +237,19 @@ public class Unit implements Serializable {
                 price = 8;
                 moves = 3;
                 maxMoves = 3;
+                try {
+                    if (!isAI) {
+                        animation = new Animation();
+                        animation.frames = new Image[1];
+                        animation.frames[0] = new Image(new FileInputStream("src/resources/images/units/playerSwordsman.png"));
+                    }else {
+                        animation = new Animation();
+                        animation.frames = new Image[1];
+                        animation.frames[0] = new Image(new FileInputStream("src/resources/images/units/enemySwordsman.png"));
+                    }
+                }catch (Exception e) {
+                    
+                }
                 break;
             case "Wizard":
                 attack = 80;
@@ -223,14 +275,40 @@ public class Unit implements Serializable {
                 attack = 50;
                 defense = 50;
                 price = 10;
+                try {
+                    if (!isAI) {
+                        animation = new Animation();
+                        animation.frames = new Image[1];
+                        animation.frames[0] = new Image(new FileInputStream("src/resources/images/units/playerSwordsman.png"));
+                    }else {
+                        animation = new Animation();
+                        animation.frames = new Image[1];
+                        animation.frames[0] = new Image(new FileInputStream("src/resources/images/units/enemySwordsman.png"));
+                    }
+                }catch (Exception e) {
+                    
+                }
                 break;
 
             case "Dragon":
                 attack = 100;
                 defense = 100;
-                price = 25;
-                moves = 3;
-                maxMoves = 3;
+                price = 20;
+                moves = 2;
+                maxMoves = 2;
+                try {
+                    if (!isAI) {
+                        animation = new Animation();
+                        animation.frames = new Image[1];
+                        animation.frames[0] = new Image(new FileInputStream("src/resources/images/units/playerDragon.png"));
+                    }else {
+                        animation = new Animation();
+                        animation.frames = new Image[1];
+                        animation.frames[0] = new Image(new FileInputStream("src/resources/images/units/enemyDragon.png"));
+                    }
+                }catch (Exception e) {
+                    
+                }
                 break;
             default:
                 break;

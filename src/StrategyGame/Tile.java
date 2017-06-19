@@ -54,7 +54,7 @@ public class Tile {
             case "Desert":
                 break;
             case "Water":
-                //isAccessible = false;
+                isAccessible = false;
                 try {
                     animation = new Animation();
                     animation.frames = new Image[4];

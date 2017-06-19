@@ -281,6 +281,7 @@ public class GameLoop extends AnimationTimer implements EventHandler {
                     } else if (tempUnit.getName().equals("Dragon")) {
                         tempUnit = new Unit("Prince", tm.tile[locX][locY].terrain, locX, locY, false);
                     } else if (tempUnit.getName().equals("Prince")) {
+                        isBuying = false;
                         tempUnit = new Unit("", "", 0, 0, false);
                     }
                 } else {
@@ -293,7 +294,7 @@ public class GameLoop extends AnimationTimer implements EventHandler {
                     isBuying = false;
                     up.units.add(tempUnit);
                     up.setGold(up.getGold() - tempUnit.getPrice());
-                }else{
+                } else {
                     //ac.playSoundEffect("failed_action");
                 }
 
@@ -328,13 +329,13 @@ public class GameLoop extends AnimationTimer implements EventHandler {
                         //System.out.println(up.getUnitAtLocation(getXComponent(first), getYComponent(first)).getMoves());
                         ai.getUnitAtLocation(getXComponent(first), getYComponent(first)).translate(deltaX, deltaY);
                     }
-                } else{
+                } else {
                 }
-            }else if(s.contains("b")){
+            } else if (s.contains("b")) {
                 int locX = getXComponent(s);
                 int locY = getYComponent(s);
-                String name = s.substring(s.indexOf("<")+1,s.indexOf(">"));
-                Unit aiTempUnit = new Unit(name,tm.tile[locX][locY].getTerrain(),locX,locY,true);
+                String name = s.substring(s.indexOf("<") + 1, s.indexOf(">"));
+                Unit aiTempUnit = new Unit(name, tm.tile[locX][locY].getTerrain(), locX, locY, true);
                 ai.units.add(aiTempUnit);
                 ai.setGold(ai.getGold() - aiTempUnit.getPrice());
             }
@@ -343,8 +344,10 @@ public class GameLoop extends AnimationTimer implements EventHandler {
                 isPlayersTurn = !isPlayersTurn;
                 if (isPlayersTurn) {
                     up.resetMoves();
+                    up.setGold(up.getGold() + up.getGoldPerTurn());
                 } else {
                     ai.resetMoves();
+                    ai.setGold(ai.getGold() + ai.getGoldPerTurn());
                 }
             }
             System.out.println(s);
@@ -389,13 +392,20 @@ public class GameLoop extends AnimationTimer implements EventHandler {
     }
 
     boolean isEmpty(int x, int y) {
-        if (ai.isAt(x, y) || ai.hasUnitAt(x, y)) {
-            return false;
-        }
-        if (up.isAt(x, y) || up.hasUnitAt(x, y)) {
-            return false;
-        }
-        if (!tm.tile[x][y].isAccessible()) {
+        try {
+            if (ai.isAt(x, y) || ai.hasUnitAt(x, y)) {
+                System.out.println("AI THERE");
+                return false;
+            }
+            if (up.isAt(x, y) || up.hasUnitAt(x, y)) {
+                System.out.println("unit there");
+                return false;
+            }
+            if (!tm.tile[y][x].isAccessible()) {
+                System.out.println("Tile not accessible");
+                return false;
+            }
+        } catch (Exception e) {
             return false;
         }
         return true;
@@ -406,7 +416,10 @@ public class GameLoop extends AnimationTimer implements EventHandler {
         if (x1 == x2) {
             if (Math.abs(y2 - y1) > 1) {
                 for (int t = Math.min(y1, y2) + 1; t < Math.max(y1, y2); t++) {
-                    if (isEmpty(x1, t)) {
+                    if (!isEmpty(x1, t)) {
+                        System.out.println("false---");
+
+                        System.out.println("----");
                         return false;
                     }
                 }
@@ -414,7 +427,8 @@ public class GameLoop extends AnimationTimer implements EventHandler {
         } else if (y1 == y2) {
             if (Math.abs(x2 - x1) > 1) {
                 for (int t = Math.min(x1, x2) + 1; t < Math.max(x1, x2); t++) {
-                    if (isEmpty(t, y1)) {
+                    if (!isEmpty(t, y1)) {
+                        System.out.println("false");
                         return false;
 
                     }

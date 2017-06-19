@@ -27,7 +27,7 @@ public class TileMap implements Serializable {
         tile = new Tile[x][y];
         for (int r = 0; r < tile.length; r++) {
             for (int c = 0; c < tile[0].length; c++) {
-                tile[r][c] = new Tile("Water");
+                tile[r][c] = new Tile("Grass");
             }
         }
     }
